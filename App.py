@@ -8,8 +8,8 @@ import tensorflow as tf
 import cv2
 import numpy as np
 import tempfile
-import requests
-MODEL_URL = 'https://drive.google.com/file/d/1cObHXn3GtPz_WyTz3Jtkhx-Qu-BLnf8p/view?usp=sharing'
+import gdown
+MODEL_ID = '1cObHXn3GtPz_WyTz3Jtkhx-Qu-BLnf8p'
 MODEL_PATH = 'Identifica_Sala_Ocupada.keras'
 
 App = Flask(__name__)
@@ -17,9 +17,7 @@ App = Flask(__name__)
 # Carrega o modelo remotamente
 if not os.path.exists(MODEL_PATH):
     print("Baixando modelo...")
-    response = requests.get(MODEL_URL)
-    with open(MODEL_PATH, 'wb') as f:
-        f.write(response.content)
+    gdown.download(id=MODEL_ID, output=MODEL_PATH, quiet=False)
     print("Modelo baixado com sucesso.")
 
 model = tf.keras.models.load_model(MODEL_PATH)
@@ -71,6 +69,5 @@ def checkGivenImage():
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    print(model.input_shape)
     App.run(port=5000, host='localhost', debug=True)
     
