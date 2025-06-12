@@ -1,5 +1,5 @@
 Flask
-tensorflow-cpu==2.11.0
+tensorflow-cpu==2.10.1
 opencv-python
 numpy
 gdown
