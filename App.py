@@ -8,11 +8,21 @@ import tensorflow as tf
 import cv2
 import numpy as np
 import tempfile
+import requests
+MODEL_URL = 'https://drive.google.com/file/d/1cObHXn3GtPz_WyTz3Jtkhx-Qu-BLnf8p/view?usp=sharing'
+MODEL_PATH = 'Identifica_Sala_Ocupada.keras'
 
 App = Flask(__name__)
 
-# Carrega o modelo uma vez
-model = tf.keras.models.load_model('Identifica_Sala_Ocupada.keras')
+# Carrega o modelo remotamente
+if not os.path.exists(MODEL_PATH):
+    print("Baixando modelo...")
+    response = requests.get(MODEL_URL)
+    with open(MODEL_PATH, 'wb') as f:
+        f.write(response.content)
+    print("Modelo baixado com sucesso.")
+
+model = tf.keras.models.load_model(MODEL_PATH)
 
 def process_image_from_bytes(image_bytes):
     # Escreve bytes temporariamente para ler com OpenCV
