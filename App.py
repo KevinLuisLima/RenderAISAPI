@@ -12,13 +12,12 @@ import gdown
 MODEL_ID = '1cObHXn3GtPz_WyTz3Jtkhx-Qu-BLnf8p'
 MODEL_PATH = 'Identifica_Sala_Ocupada.keras'
 
-App = Flask(__name__)
+app = Flask(__name__)
 
 # Carrega o modelo remotamente
 if not os.path.exists(MODEL_PATH):
     print("Baixando modelo...")
-    gdown.download(id=MODEL_ID, output=MODEL_PATH, quiet=False)
-    print("Modelo baixado com sucesso.")
+    gdown.download(f"https://drive.google.com/uc?id={MODEL_ID}", MODEL_PATH, quiet=False)
 
 model = tf.keras.models.load_model(MODEL_PATH)
 
@@ -44,7 +43,7 @@ def predict_from_array(image_bytes):
     prediction = model.predict(img)
     return prediction
 
-@App.route('/image_result', methods=['POST'])
+@app.route('/image_result', methods=['POST'])
 def checkGivenImage():
     if 'image' not in request.files:
         return jsonify({'error': 'Nenhum arquivo enviado'}), 400
@@ -69,5 +68,5 @@ def checkGivenImage():
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    App.run(port=5000, host='localhost', debug=True)
+    app.run(port=5000, host='localhost', debug=True)
     

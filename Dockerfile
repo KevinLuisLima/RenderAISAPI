@@ -1,12 +1,17 @@
 FROM python:3.10-slim
 RUN apt-get update && apt-get install -y \
-    build-essential \
-    libgl1-mesa-glx \
+    gcc \
+    libgl1 \
     libglib2.0-0 \
     && rm -rf /var/lib/apt/lists/*
-WORKDIR /App
-COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
-COPY . .
+
+WORKDIR /app
+
+COPY . /app
+
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
+
 EXPOSE 5000
-CMD ["python", "App.py"]
+
+CMD ["python", "app.py"]
