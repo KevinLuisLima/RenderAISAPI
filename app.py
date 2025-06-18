@@ -17,7 +17,10 @@ app = Flask(__name__)
 # Carrega o modelo remotamente
 if not os.path.exists(MODEL_PATH):
     print("Baixando modelo...")
-    gdown.download(f"https://drive.google.com/uc?id={MODEL_ID}", MODEL_PATH, quiet=False)
+    gdown.download(f"https://drive.google.com/uc?id={MODEL_ID}", MODEL_PATH, quiet=False, fuzzy=True)
+    
+    if os.path.getsize(MODEL_PATH) < 100000:
+        raise ValueError("Modelo corrompido ou link incorreto. Verifique o compartilhamento ou ID do Google Drive.")
 
 model = tf.keras.models.load_model(MODEL_PATH)
 
