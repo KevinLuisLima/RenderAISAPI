@@ -8,18 +8,10 @@ import tensorflow as tf
 import cv2
 import numpy as np
 import tempfile
-import requests
 
 app = Flask(__name__)
 
 MODEL_PATH = 'Identifica_Sala_Ocupada.keras'
-MODEL_URL = 'https://huggingface.co/KevinLuis/kerasModel/resolve/main/Identifica_Sala_Ocupada.keras'
-
-if not os.path.exists(MODEL_PATH):
-    print("Baixando modelo...")
-    response = requests.get(MODEL_URL)
-    with open(MODEL_PATH, 'wb') as f:
-        f.write(response.content)
 model = tf.keras.models.load_model(MODEL_PATH)
 
 def process_image_from_bytes(image_bytes):
